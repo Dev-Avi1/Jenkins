@@ -1,0 +1,68 @@
+# IN this syntax the agent is using and mentioning at the stage level only
+pipeline{
+  stages{
+   stage("stage 1"){
+    agent{}
+    steps{}
+   }
+   stage("stage 2"){
+    agent{}
+    steps{}
+   }
+  }
+}
+##-------------------------------------------------------
+# In this syntax the agent is using at global level where the entire runs at global agent only
+
+pipeline{
+  agent any
+  stages{
+    stage("stage 1"){
+        steps{
+            echo 'first stage'
+        }
+    }
+    stege("stage 2"){
+        steps{
+            echo 'Second stage'
+        }
+    }
+
+  }
+}
+#--------------------------
+# In this script we are mentioning the agent 
+pipeline{
+  agent {label'demo'}
+  stages{
+    stage("stage1"){
+        steps{
+            echo 'fisrt stage'
+        }    
+    }
+    stege("stege2"){
+        steps{
+            echo 'second stage'
+        }
+    }
+  }
+}
+#---------------------------------------
+# IN this script we are mentioning agent at global level is none and mentioning at stage level
+pipeline{
+  agent none
+  stages{
+    stage('stage1'){
+        agent{label'demo'}
+        steps{
+            echo 'first stage'
+        }
+    }
+    stage{
+        agent any
+        steps{
+            echo 'Second stage'
+        }
+    }
+  }  
+}
