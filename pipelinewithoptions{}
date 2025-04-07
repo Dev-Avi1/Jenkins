@@ -1,0 +1,79 @@
+# IN this pipeline script we are using the option module with logRotation for builds
+pipeline{
+    agent {label'demo'}
+    options{
+        buildDiscarder(logRotator(numToKeepstr:'6'))
+    }
+    stages{
+        stage('stage1'){
+            steps{
+                echo 'First Stage'
+            }
+        }
+    }
+}
+#---------------------------------------------------------------
+# In this Script we are using the retry option for the pipeline where this pipeline can
+#re trigger by given number of times 
+pipeline{
+    agent {label'demo'}
+    option{
+        retry(3)
+    }
+    stages{
+    stage('stage1'){
+        steps{
+            sh 'exit 1'
+        }
+    }
+    stage('stage2'){
+        steps{
+            sh 'echo stage2'
+        }
+    }
+  }
+}
+#----------------------------------------------------------
+# In this script we are using the retry option in side stage here the mention 
+#stage only runs multiple time at the given number of times.
+pipeline{
+    agent {label'demo'}
+    stages{
+        stage('stage1'){
+            option{
+                retry(2)
+            }
+            steps{
+                sh 'exit 1'
+            }
+        }
+        stage('stage2'){
+            steps{
+                sh "echo stage 2"
+            }
+        }
+    }
+}
+#-----------------------------------------------------------------
+# In this pipeline script we are using the timeout option where we are mentioning here the pipeline needs to run 
+# at the mention time only 
+pipeline{
+    agent {label'demo'}
+    options{
+        timeout(time:15, unit:'SECONDS')
+        timestamps()
+    }
+    stages{
+        stage('stage1'){
+            steps{
+                sh 'sleep 5'
+            }
+        }
+        stage(stage2){
+            steps{
+                sh 'sleep 5'
+            }
+        }
+    }
+}
+
