@@ -1,0 +1,39 @@
+# Hers is a jenkins pipeline script (declarative syntax) where one pipeline triggers another using the build step. # you can trigger the another jenkins job/pipeline and even pass parameters to it needed.
+pipeline{
+    agent any
+    stages{
+        stage('build') {
+          steps{
+            echo 'building ....'
+            // your build logic 
+          }  
+        }
+        stage('test'){
+            steps{
+                echo 'running tests ....'
+                // your test logic 
+            }
+        }
+        stage('trigger Downstream job') {
+            steps{
+                echo 'trigger another jenkins pipeline...'
+
+                //triggering the another jenkins job
+                build job: 'downstream-pipeline-job-name',
+                wait: true,
+                parameters:[
+                    string(name: 'ENV', value: 'dev'),
+                    booleanParam(name: 'RUN_TESTS',value: true)
+                ]
+            }
+        }
+    }
+    post {
+        success{
+            echo 'pipeline completed successfully.'
+        }
+        failure {
+            echo 'pipeline failed.' 
+        }
+    }
+}
