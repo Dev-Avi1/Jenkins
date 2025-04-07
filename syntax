@@ -66,3 +66,46 @@ pipeline{
     }
   }  
 }
+#------------------------
+# In this syntax we are mentioning the custome agent at the node level one
+pipeline{
+ agent none
+ stages{
+   stage('stage1'){
+     agent{
+        node{
+          label'demo'
+          customWorkspace'/tmp/jenkins'
+        }
+     }
+     steps{ 
+        echo 'First stage' 
+    }
+   }
+   stage('stage2'){
+     agent any
+     steps{ 
+       echo 'second stage'   
+    }
+   }
+ }
+}
+#---------------------------------------------------------------
+# In this syntax we are lunching the agent by uising the environment variable
+pipeline{
+  agent {label'demo'}
+  environment{
+    MYNAME = 'AVINASH'
+  }
+  stages{
+    stage('stage1'){
+      steps{
+        sh "echo 'Your name:$MYNAME' "
+      }
+    }
+    stage('stage2'){
+      steps{echo env.MYNAME
+      }
+    }
+  }
+}
